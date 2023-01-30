@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -6,7 +7,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,38 +30,41 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final audioplayer = AudioPlayer();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  Future<void> _playSound(int soundNumber) async {
+    final player = AudioPlayer();
+    await player.play(AssetSource('sounds/note$soundNumber.wav'));
+  }
+
+  Expanded _buildTapWidget({required int soundNumber, required Color color}) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => _playSound(soundNumber),
+        child: Container(
+          color: color,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
+      backgroundColor: Colors.black,
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            _buildTapWidget(soundNumber: 1, color: Colors.yellow),
+            _buildTapWidget(soundNumber: 2, color: Colors.blue),
+            _buildTapWidget(soundNumber: 3, color: Colors.teal),
+            _buildTapWidget(soundNumber: 4, color: Colors.orange),
+            _buildTapWidget(soundNumber: 5, color: Colors.purple),
+            _buildTapWidget(soundNumber: 6, color: Colors.green),
+            _buildTapWidget(soundNumber: 7, color: Colors.red),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
